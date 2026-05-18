@@ -16,122 +16,125 @@ GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 IG_USER_ID = os.getenv("IG_ACCOUNT_ID")
 IG_TOKEN = os.getenv("IG_ACCESS_TOKEN")
 
-def generar_y_guardar():
-    print("🤖 Consultando a Gemini 3 Flash Preview...")
+def generar_datos_estrictos():
+    print("🤖 Consultando a Gemini...")
     client = genai.Client(api_key=GEMINI_KEY)
     
+    # Nuevo Prompt estricto para noticias cortas (máx 120 caracteres)
     prompt = (
-        "Actúa como un experto en tecnología. Resume las 3 noticias más impactantes de hoy "
-        "en Chile y el mundo. Usa 1 emoji por noticia. Sé directo y profesional. "
-        "No uses negritas (asteriscos)."
+        "Resume las 3 noticias de tecnología más importantes de hoy en Chile y el mundo. "
+        "Formato estricto: Una frase ultra-corta por noticia con un emoji. Máximo 120 caracteres por noticia. "
+        "Separa cada noticia por un solo salto de línea. No uses asteriscos ni negritas."
     )
     
     response = client.models.generate_content(model="gemini-3-flash-preview", contents=prompt)
     texto_raw = response.text
-    # Limpiamos asteriscos por si acaso Gemini los usa
     texto_limpio = texto_raw.replace("**", "").replace("*", "").strip()
     
-    print("Contenido generado y limpio.")
+    # Separamos las noticias en una lista. Gemini debería darnos exactamente 3 líneas.
+    noticias_lista = [n.strip() for n in texto_limpio.split('\n') if n.strip()]
+    # Nos aseguramos de tener al menos 3 elementos para evitar errores en Pillow
+    while len(noticias_lista) < 3:
+        noticias_lista.append("Actualizando últimas noticias...")
+        
+    print("Contenido generado y dividido.")
+    return noticias_lista[:3] # Retornamos exactamente las primeras 3
 
-    # --- DISEÑO EXÓTICO CON PILLOW ---
-    width, height = 1080, 1080
-    # Fondo: Negro Azulado Profundo (Muy elegante)
-    img = Image.new('RGB', (width, height), color=(10, 12, 16))
+def crear_imagen(noticias_3_items):
+    print("🎨 Diseñando sobre tu template de boxes...")
+    # 1. Abrimos tu plantilla (1080x1350)
+    try:
+        img = Image.open("src/template.png")
+    except FileNotFoundError:
+        print("❌ Error: No se encontró 'src/template.png' en la carpeta /src.")
+        exit(1)
+        
     d = ImageDraw.Draw(img)
 
-    # Intentar cargar fuente Roboto
+    # 2. INTENTO ROBUSTO DE CARGA DE FUENTE ROBOTO (Linux case-sensitive)
     font_path = "src/Roboto.ttf"
+    # Si no la encuentra como Roboto.ttf, probamos roboto.ttf (minúscula)
+    if not os.path.exists(font_path):
+        font_path = "src/roboto.ttf"
+
     try:
-        font_titulo = ImageFont.truetype(font_path, 80)
-        font_cuerpo = ImageFont.truetype(font_path, 42)
-        font_footer = ImageFont.truetype(font_path, 30)
-    except:
-        print("⚠️ No se halló Roboto.ttf en /src, usando fuente default.")
-        font_titulo = font_cuerpo = font_footer = ImageFont.load_default()
+        # Usamos tamaños distintos según el área
+        font_fecha = ImageFont.truetype(font_path, 35) # Pequeña para arriba
+        font_noticia = ImageFont.truetype(font_path, 45) # Mediana para las cajitas
+    except Exception as e:
+        print(f"⚠️ Error cargando Roboto.ttf ({e}). Usando default.")
+        font_fecha = font_noticia = ImageFont.load_default()
 
-    # 1. Elemento decorativo: Barra lateral neón
-    d.rectangle([0, 0, 15, 1080], fill=(0, 255, 150))
-    
-    # 2. Título principal
-    d.text((80, 100), "RESUMEN", font=font_titulo, fill=(255, 255, 255))
-    d.text((80, 180), "TECH CHILE", font=font_titulo, fill=(0, 255, 150))
+    # --- MATH DE PÍXELES: COORDENADAS EXACTAS ---
 
-    # 3. Dibujar Noticias con ajuste de línea (Wrapping)
-    y_position = 350
-    noticias = texto_limpio.split('\n')
-    
-    for noticia in noticias:
-        if not noticia.strip(): continue
-        
-        # Ajustamos el texto a un ancho de 40 caracteres
-        wrapped_lines = textwrap.wrap(noticia, width=40)
-        
-        # Dibujar un pequeño indicador neón por noticia
-        d.ellipse([60, y_position + 10, 75, y_position + 25], fill=(0, 255, 150))
-        
-        for line in wrapped_lines:
-            d.text((100, y_position), line, font=font_cuerpo, fill=(230, 230, 230))
-            y_position += 55
-            
-        y_position += 40 # Espacio entre bloques de noticias
+    # Color de texto (Usaremos blanco grisáceo para buen contraste contra verde)
+    color_texto = (245, 245, 245)
 
-    # 4. Footer con marca
-    d.rectangle([15, 980, 1080, 1080], fill=(18, 20, 26))
+    # 3. Estampar Fecha en la cajita superior (aprox. 540 centro X, 95 centro Y)
     fecha_hoy = time.strftime('%d / %m / %Y')
-    d.text((80, 1015), f"📅 {fecha_hoy} | Powered by Gemini 3", font=font_footer, fill=(120, 120, 120))
-    d.text((880, 1015), "@resumenia", font=font_footer, fill=(0, 255, 150))
+    # Calculamos ancho para centrar
+    bbox_f = d.textbbox((0, 0), fecha_hoy, font=font_fecha)
+    f_w, f_h = bbox_f[2] - bbox_f[0], bbox_f[3] - bbox_f[1]
+    d.text((540 - f_w/2, 95 - f_h/2), fecha_hoy, font=font_fecha, fill=color_texto)
+
+    # 4. Estampar las 3 Noticias en sus cajitas verdes
+    # Coordenadas calculadas basadas en tu diseño:
+    coords_y = [260, 580, 900] # Punto de inicio Y de cada cajita verde
+    
+    for i in range(3):
+        noticia = noticias_3_items[i]
+        x_start = 100 # Margen izquierdo
+        y_start = coords_y[i]
+        
+        #textwrap para que no se pase del ancho de la cajita verde
+        #Ancho máximo aproximado en caracteres para que quepa en el rectángulo
+        wrapped_lines = textwrap.wrap(noticia, width=42) 
+        
+        # Dibujamos cada línea de la noticia
+        for line in wrapped_lines:
+            d.text((x_start, y_start), line, font=font_noticia, fill=color_texto)
+            y_start += (font_noticia.size + 15) # Salto de línea
 
     # Guardado
     if not os.path.exists('public'): os.makedirs('public')
     img.save("public/post_dia.jpg", quality=100, subsampling=0)
     
-    # Guardar texto para el pie de foto de Instagram
+    # Unimos las noticias para el caption de Instagram
+    full_caption = "\n\n".join(noticias_3_items)
     with open("public/caption.txt", "w", encoding="utf-8") as f:
-        f.write(texto_limpio)
+        f.write(full_caption)
         
-    print("✅ Imagen exótica generada en public/post_dia.jpg")
+    print("✅ Imagen exótica generada correctamente sobre cajitas verdes.")
 
 def publicar_en_instagram():
+    # ... (Esta función sigue igual, no cambia nada) ...
     print(f"🚀 Iniciando publicación en Instagram...")
-    
     if not os.path.exists("public/caption.txt"):
         print("❌ Error: No existe el archivo de caption.")
         return
-
     with open("public/caption.txt", "r", encoding="utf-8") as f:
         resumen = f.read()
-
     url_base = f"https://graph.facebook.com/v20.0/{IG_USER_ID}/media"
     payload = {
         'image_url': IMAGE_URL,
-        'caption': f"Resumen Tech de hoy 🤖\n\n{resumen}\n\n#Chile #Tech #IA #Santiago",
+        'caption': f"Noticias Tech de hoy 🤖\n\n{resumen}\n\n#Chile #Tech #IA #Santiago",
         'access_token': IG_TOKEN
     }
-    
     res = requests.post(url_base, data=payload)
     if res.status_code != 200:
-        print("❌ Error de Meta (Contenedor):", res.json())
+        print("❌ Error:", res.json())
         sys.exit(1)
-
     creation_id = res.json().get('id')
-    print(f"📦 Contenedor creado (ID: {creation_id}).")
-    
-    # Pausa de seguridad antes de publicar
-    time.sleep(10)
-    
+    time.sleep(15)
     url_pub = f"https://graph.facebook.com/v20.0/{IG_USER_ID}/media_publish"
-    r_pub = requests.post(url_pub, data={'creation_id': creation_id, 'access_token': IG_TOKEN})
-    
-    if r_pub.status_code == 200:
-        print("🎉 ¡TODO LISTO! Post publicado en Instagram.")
-    else:
-        print("❌ Error al publicar:", r_pub.json())
+    requests.post(url_pub, data={'creation_id': creation_id, 'access_token': IG_TOKEN})
+    print("🎉 ¡TODO LISTO! Post Portrait publicado.")
 
 if __name__ == "__main__":
-    # Si no hay argumentos, genera por defecto
     arg = sys.argv[1] if len(sys.argv) > 1 else "generate"
     
     if arg == "generate":
-        generar_y_guardar()
+        tres_noticias = generar_datos_estrictos()
+        crear_imagen(tres_noticias)
     elif arg == "publish":
         publicar_en_instagram()

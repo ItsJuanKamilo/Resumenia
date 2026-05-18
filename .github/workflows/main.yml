@@ -24,6 +24,7 @@ jobs:
       - name: 1. Generar Imagen
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: python src/main.py generate
 
       - name: 2. Subir imagen a GitHub

@@ -15,13 +15,17 @@ IG_USER_ID = os.getenv("IG_ACCOUNT_ID")
 IG_TOKEN = os.getenv("IG_ACCESS_TOKEN")
 
 def generar_contenido():
+    print("🤖 Consultando a Gemini 3 Flash Preview...")
     client = genai.Client(api_key=GEMINI_KEY)
     
-    # ACTUALIZADO: Usamos Gemini 3 Flash que es el estándar ahora
-    prompt = "Resume las 3 noticias de tecnología más importantes de hoy en Santiago de Chile. Formato: Una frase corta por noticia con emojis."
+    prompt = (
+        "Resume las 3 noticias de tecnología más importantes de hoy en Chile y el mundo. "
+        "Formato: Una frase corta por noticia. Usa emojis. Tono profesional."
+    )
     
+    # CAMBIO AQUÍ: Agregamos el sufijo -preview
     response = client.models.generate_content(
-        model="gemini-3-flash", 
+        model="gemini-3-flash-preview", 
         contents=prompt
     )
     return response.text

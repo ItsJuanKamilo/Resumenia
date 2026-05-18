@@ -1,4 +1,4 @@
-requests
-pillow
-google-genai
-python-dotenv
+requests==2.32.3
+pillow==11.0.0
+google-genai==0.3.0
+python-dotenv==1.0.1

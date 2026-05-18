@@ -1,4 +1,5 @@
 name: Publicar Resumen Diario
+
 on:
   workflow_dispatch:
   schedule:
@@ -7,24 +8,37 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4 # Actualizado a v4
+      - uses: actions/checkout@v4
+
       - name: Set up Python
-        uses: actions/setup-python@v5 # Actualizado a v5
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # Subido a 3.11
+          python-version: '3.11'
+
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Run script
+
+      - name: 1. Generar Imagen
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          IG_ACCOUNT_ID: ${{ secrets.IG_ACCOUNT_ID }}
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-        run: python src/main.py
-      - name: Commit and Push image
+        run: python src/main.py generate
+
+      - name: 2. Subir imagen a GitHub
         run: |
           git config --global user.name "ResumenIA-Bot"
           git config --global user.email "bot@resumenia.com"
-          git add public/post_dia.jpg
-          git commit -m "Nuevo post diario" || echo "No hay cambios"
+          git add public/post_dia.jpg public/caption.txt
+          git commit -m "Imagen del dia $(date)" || echo "No hay cambios"
           git push
+
+      - name: 3. Esperar a GitHub Pages (120 segundos)
+        run: sleep 120
+
+      - name: 4. Publicar en Instagram
+        env:
+          IG_ACCOUNT_ID: ${{ secrets.IG_ACCOUNT_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: python src/main.py publish

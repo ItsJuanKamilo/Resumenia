@@ -1,5 +1,5 @@
-Falla global de CrowdStrike y Microsoft impacta servicios críticos en Chile y el mundo 💻
+1. Nvidia reporta ingresos récord impulsados por la demanda de chips para IA, superando las previsiones de los analistas.
 
-OpenAI lanza GPT-4o mini para liderar el segmento de modelos de IA eficientes 🤖
 
-Chile expande su capacidad de centros de datos ante el auge de la nube regional 🏢
+
+2. Microsoft presenta los nuevos Copilot+ PCs, diseñados con procesadores específicos para ejecutar inteligencia artificial.

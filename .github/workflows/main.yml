@@ -1,1 +1,30 @@
+name: Publicar Resumen Diario
+on:
+  workflow_dispatch: # Permite correrlo manualmente para testear
+  schedule:
+    - cron: '0 12 * * *' # Todos los días a las 12:00 UTC
 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run script
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          IG_ACCOUNT_ID: ${{ secrets.IG_ACCOUNT_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: python src/main.py
+      - name: Commit and Push image
+        run: |
+          git config --global user.name "ResumenIA-Bot"
+          git config --global user.email "bot@resumenia.com"
+          git add public/post_dia.jpg
+          git commit -m "Nuevo post diario"
+          git push

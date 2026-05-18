@@ -20,31 +20,35 @@ IG_USER_ID = os.getenv("IG_ACCOUNT_ID")
 IG_TOKEN = os.getenv("IG_ACCESS_TOKEN")
 
 def obtener_datos():
-    print("🌐 Consultando a Gemini con Google Search (Chile + Mundo)...")
+    print("🌐 Consultando a Gemini con Google Search FORZADO (Chile + Mundo)...")
     client = genai.Client(api_key=GEMINI_KEY)
     
     # 1. Fecha automática
-    fecha_actual = datetime.datetime.now().strftime('%d de %m de %Y')
+    fecha_actual = datetime.datetime.now().strftime('%d de %B de %Y')
     
-    # 2. Definimos la herramienta y el CONFIG
-    # En la v2.4.0+, 'tools' debe ir dentro de 'config'
+    # 2. Configuración de búsqueda dinámica (EL CAMBIO CLAVE)
+    # Establecemos el umbral en 0 para que la búsqueda sea obligatoria
     config_ia = types.GenerateContentConfig(
-        tools=[types.Tool(google_search=types.GoogleSearch())]
+        tools=[types.Tool(google_search=types.GoogleSearch())],
+        dynamic_retrieval_config=types.DynamicRetrievalConfig(
+            dynamic_threshold=0.0 # <--- 0 significa "Busca siempre en Google"
+        )
     )
 
+    # 3. Prompt con "instrucciones de sistema" más fuertes
     prompt = (
-        f"Hoy es {fecha_actual}. Actúa como un editor de noticias tecnológicas especializado en IA. "
-        "Busca en Google y resume las 3 noticias más impactantes de hoy sobre IA y tecnología, "
-        "abarcando tanto Chile como el mundo. "
-        "Máximo 110 caracteres por noticia. Sin números ni asteriscos.\n"
+        f"INSTRUCCIÓN DE SISTEMA: Hoy es {fecha_actual}. "
+        "TU TAREA ES BUSCAR EN GOOGLE las noticias de las últimas 24 horas. "
+        "IGNORA CUALQUIER DATO DE TU MEMORIA DE 2024 o 2025. "
+        "Resume las 3 noticias más impactantes de HOY sobre IA y tecnología en Chile y el mundo. "
+        "Sé ultra-preciso. Máximo 110 caracteres por noticia. Sin números ni asteriscos.\n"
         "AL FINAL añade una línea: 'KEYWORD:' y una palabra en inglés para la foto."
     )
     
-    # 3. La llamada corregida
     response = client.models.generate_content(
         model="gemini-3-flash-preview", 
         contents=prompt,
-        config=config_ia  # <--- Pasamos el objeto de configuración aquí
+        config=config_ia
     )
     
     raw = response.text.replace("**", "").replace("*", "").strip()

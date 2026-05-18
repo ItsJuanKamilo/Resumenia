@@ -1,5 +1,5 @@
-Aquí tienes el resumen de las 3 noticias tecnológicas más relevantes del día:
+1. NVIDIA reportó resultados financieros históricos con un crecimiento de ingresos del 262% interanual, impulsado por la demanda masiva de sus chips H100 y la próxima arquitectura Blackwell para centros de datos de inteligencia artificial. 🚀
 
-1. **NVIDIA alcanza máximos históricos** en bolsa impulsada por una demanda sin precedentes de chips para inteligencia artificial. 📈
-2. **Líderes globales firman en el AI Seoul Summit** nuevos compromisos para garantizar el desarrollo seguro y ético de la IA generativa. 🌐
-3. **Chile fortalece su infraestructura digital** con el avance estratégico del proyecto Humboldt, el primer cable submarino entre Sudamérica y Asia-Pacífico. ⚓
+2. Microsoft anunció la línea de computadores Copilot+ PC que integran procesamiento de IA directamente en el hardware, introduciendo la función Recall para rastrear toda la actividad del usuario, lo que ha levantado alertas críticas sobre la privacidad. 💻
+
+3. Chile consolida su ventaja competitiva en infraestructura digital tras el anuncio de nuevas expansiones en centros de datos y la progresión del proyecto de cable submarino Humboldt, reafirmando su rol como el principal hub tecnológico de la región. 🇨🇱

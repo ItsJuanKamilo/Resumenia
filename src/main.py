@@ -20,31 +20,37 @@ IG_USER_ID = os.getenv("IG_ACCOUNT_ID")
 IG_TOKEN = os.getenv("IG_ACCESS_TOKEN")
 
 def obtener_datos():
-    print("🌐 Consultando a Gemini con Google Search FORZADO (Chile + Mundo)...")
+    print("🌐 Consultando a Gemini con Google Search (Chile + Mundo)...")
     client = genai.Client(api_key=GEMINI_KEY)
     
     # 1. Fecha automática
     fecha_actual = datetime.datetime.now().strftime('%d de %B de %Y')
     
-    # 2. Configuración de búsqueda dinámica (EL CAMBIO CLAVE)
-    # Establecemos el umbral en 0 para que la búsqueda sea obligatoria
+    # 2. Definimos la herramienta con la búsqueda dinámica ANIDADA
+    # Esta es la jerarquía que Pydantic acepta en la v2.4.0
     config_ia = types.GenerateContentConfig(
-        tools=[types.Tool(google_search=types.GoogleSearch())],
-        dynamic_retrieval_config=types.DynamicRetrievalConfig(
-            dynamic_threshold=0.0 # <--- 0 significa "Busca siempre en Google"
-        )
+        tools=[
+            types.Tool(
+                google_search=types.GoogleSearchRetrieval(
+                    dynamic_retrieval_config=types.DynamicRetrievalConfig(
+                        dynamic_threshold=0.0 # <--- Fuerza la búsqueda al 100%
+                    )
+                )
+            )
+        ]
     )
 
-    # 3. Prompt con "instrucciones de sistema" más fuertes
+    # 3. El Prompt "Periodista"
     prompt = (
-        f"INSTRUCCIÓN DE SISTEMA: Hoy es {fecha_actual}. "
-        "TU TAREA ES BUSCAR EN GOOGLE las noticias de las últimas 24 horas. "
-        "IGNORA CUALQUIER DATO DE TU MEMORIA DE 2024 o 2025. "
-        "Resume las 3 noticias más impactantes de HOY sobre IA y tecnología en Chile y el mundo. "
-        "Sé ultra-preciso. Máximo 110 caracteres por noticia. Sin números ni asteriscos.\n"
+        f"INSTRUCCIÓN: Hoy es {fecha_actual}. "
+        "USA TU HERRAMIENTA DE BÚSQUEDA para encontrar las 3 noticias de tecnología e IA "
+        "más importantes de las últimas 24 horas en Chile y el mundo. "
+        "PROHIBIDO usar noticias de 2024 o 2025. Sé directo y profesional. "
+        "Máximo 110 caracteres por noticia. Sin números ni asteriscos.\n"
         "AL FINAL añade una línea: 'KEYWORD:' y una palabra en inglés para la foto."
     )
     
+    # 4. Ejecución
     response = client.models.generate_content(
         model="gemini-3-flash-preview", 
         contents=prompt,

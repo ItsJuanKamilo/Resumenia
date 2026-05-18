@@ -23,37 +23,32 @@ def obtener_datos():
     print("🌐 Consultando a Gemini con Google Search (Chile + Mundo)...")
     client = genai.Client(api_key=GEMINI_KEY)
     
-    # 1. Generamos la fecha de hoy automáticamente
-    # Ejemplo: "18 de mayo de 2026"
+    # 1. Fecha automática
     fecha_actual = datetime.datetime.now().strftime('%d de %m de %Y')
     
-    # 2. Configuramos la herramienta de búsqueda (Grounding)
-    google_search_tool = types.Tool(
-        google_search = types.GoogleSearch()
+    # 2. Definimos la herramienta y el CONFIG
+    # En la v2.4.0+, 'tools' debe ir dentro de 'config'
+    config_ia = types.GenerateContentConfig(
+        tools=[types.Tool(google_search=types.GoogleSearch())]
     )
 
-    # 3. Unimos los dos prompts en uno solo "Super-Prompt"
     prompt = (
-        f"Hoy es {fecha_actual}. Actúa como un editor de noticias tecnológicas especializado en Inteligencia Artificial. "
+        f"Hoy es {fecha_actual}. Actúa como un editor de noticias tecnológicas especializado en IA. "
         "Busca en Google y resume las 3 noticias más impactantes de hoy sobre IA y tecnología, "
-        "abarcando tanto lo que sucede en Chile como los hitos más importantes a nivel mundial. "
-        "Sé ultra-preciso con los hechos, directo y profesional. "
-        "Máximo 110 caracteres por noticia. "
-        "IMPORTANTE: No uses números, ni guiones, ni asteriscos. Solo el texto plano, una noticia por línea.\n"
-        "AL FINAL añade una línea: 'KEYWORD:' y una palabra en inglés para buscar una foto "
-        "relacionada con la noticia principal."
+        "abarcando tanto Chile como el mundo. "
+        "Máximo 110 caracteres por noticia. Sin números ni asteriscos.\n"
+        "AL FINAL añade una línea: 'KEYWORD:' y una palabra en inglés para la foto."
     )
     
-    # 4. Llamada a la API con las herramientas activadas
+    # 3. La llamada corregida
     response = client.models.generate_content(
         model="gemini-3-flash-preview", 
         contents=prompt,
-        tools=[google_search_tool]
+        config=config_ia  # <--- Pasamos el objeto de configuración aquí
     )
     
     raw = response.text.replace("**", "").replace("*", "").strip()
     
-    # Lógica de separación de Keyword y noticias
     if "KEYWORD:" in raw:
         resumen, kw = raw.split("KEYWORD:")
         lineas = [l.strip() for l in resumen.strip().split('\n') if len(l.strip()) > 10]

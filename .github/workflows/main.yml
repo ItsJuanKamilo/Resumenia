@@ -1,18 +1,18 @@
 name: Publicar Resumen Diario
 on:
-  workflow_dispatch: # Permite correrlo manualmente para testear
+  workflow_dispatch:
   schedule:
-    - cron: '0 12 * * *' # Todos los días a las 12:00 UTC
+    - cron: '0 12 * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4 # Actualizado a v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # Actualizado a v5
         with:
-          python-version: '3.9'
+          python-version: '3.11' # Subido a 3.11
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run script
@@ -26,5 +26,5 @@ jobs:
           git config --global user.name "ResumenIA-Bot"
           git config --global user.email "bot@resumenia.com"
           git add public/post_dia.jpg
-          git commit -m "Nuevo post diario"
+          git commit -m "Nuevo post diario" || echo "No hay cambios"
           git push

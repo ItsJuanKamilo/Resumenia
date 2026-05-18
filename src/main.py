@@ -5,6 +5,9 @@ import sys
 import textwrap
 from google import genai
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
+import random
+from google.genai import types
+import datetime
 
 # --- CONFIGURACIÓN ---
 GITHUB_USER = "ItsJuanKamilo"
@@ -17,34 +20,71 @@ IG_USER_ID = os.getenv("IG_ACCOUNT_ID")
 IG_TOKEN = os.getenv("IG_ACCESS_TOKEN")
 
 def obtener_datos():
-    print("🤖 Consultando a Gemini...")
+    print("🌐 Consultando a Gemini con Google Search (Chile + Mundo)...")
     client = genai.Client(api_key=GEMINI_KEY)
     
+    # 1. Generamos la fecha de hoy automáticamente
+    # Ejemplo: "18 de mayo de 2026"
+    fecha_actual = datetime.datetime.now().strftime('%d de %m de %Y')
+    
+    # 2. Configuramos la herramienta de búsqueda (Grounding)
+    google_search_tool = types.Tool(
+        google_search = types.GoogleSearch()
+    )
+
+    # 3. Unimos los dos prompts en uno solo "Super-Prompt"
     prompt = (
-        "Resume las 3 noticias de tecnología más importantes de hoy. "
-        "Sé directo y profesional. Máximo 110 caracteres por noticia. "
-        "IMPORTANTE: No uses números, ni guiones, ni asteriscos. Solo el texto plano.\n"
-        "AL FINAL añade una línea: 'KEYWORD:' y una palabra en inglés para la foto."
+        f"Hoy es {fecha_actual}. Actúa como un editor de noticias tecnológicas especializado en Inteligencia Artificial. "
+        "Busca en Google y resume las 3 noticias más impactantes de hoy sobre IA y tecnología, "
+        "abarcando tanto lo que sucede en Chile como los hitos más importantes a nivel mundial. "
+        "Sé ultra-preciso con los hechos, directo y profesional. "
+        "Máximo 110 caracteres por noticia. "
+        "IMPORTANTE: No uses números, ni guiones, ni asteriscos. Solo el texto plano, una noticia por línea.\n"
+        "AL FINAL añade una línea: 'KEYWORD:' y una palabra en inglés para buscar una foto "
+        "relacionada con la noticia principal."
     )
     
-    response = client.models.generate_content(model="gemini-3-flash-preview", contents=prompt)
+    # 4. Llamada a la API con las herramientas activadas
+    response = client.models.generate_content(
+        model="gemini-3-flash-preview", 
+        contents=prompt,
+        tools=[google_search_tool]
+    )
+    
     raw = response.text.replace("**", "").replace("*", "").strip()
     
+    # Lógica de separación de Keyword y noticias
     if "KEYWORD:" in raw:
         resumen, kw = raw.split("KEYWORD:")
-        lineas = [l.strip() for l in resumen.strip().split('\n') if len(l.strip()) > 5]
+        lineas = [l.strip() for l in resumen.strip().split('\n') if len(l.strip()) > 10]
         return lineas[:3], kw.strip()
-    return raw.split('\n')[:3], "technology"
+    
+    return raw.split('\n')[:3], "artificial intelligence"
 
 def descargar_foto(keyword):
-    print(f"📸 Buscando foto para: {keyword}")
-    url = f"https://api.pexels.com/v1/search?query={keyword}&per_page=1&orientation=landscape"
+    # ELEGIMOS UNA PÁGINA AL AZAR (del 1 al 5)
+    pagina_aleatoria = random.randint(1, 5)
+    print(f"📸 Buscando '{keyword}' en la página {pagina_aleatoria} de Pexels...")
+    
+    # Pedimos 80 fotos (el máximo) de esa página aleatoria
+    url = f"https://api.pexels.com/v1/search?query={keyword}&per_page=80&page={pagina_aleatoria}&orientation=landscape"
     headers = {"Authorization": PEXELS_KEY}
+    
     try:
         res = requests.get(url, headers=headers).json()
-        img_url = res['photos'][0]['src']['large2x']
+        if not res.get('photos'):
+            # Si no hay fotos en esa página, reintentamos en la página 1
+            res = requests.get(url.replace(f"page={pagina_aleatoria}", "page=1"), headers=headers).json()
+            if not res.get('photos'): return None
+        
+        # Elegimos 1 entre las 80 disponibles
+        foto_final = random.choice(res['photos'])
+        print(f"✅ Foto seleccionada de un pool de {len(res['photos'])} imágenes.")
+        
+        img_url = foto_final['src']['large2x']
         return Image.open(requests.get(img_url, stream=True).raw)
-    except:
+    except Exception as e:
+        print(f"⚠️ Error de variedad: {e}")
         return None
 
 def crear_imagen(noticias, foto_pexels):

@@ -22,7 +22,7 @@ def obtener_datos():
     
     prompt = (
         "Resume las 3 noticias de tecnología más importantes de hoy. "
-        "Sé directo. Máximo 110 caracteres por noticia. "
+        "Sé directo y profesional. Máximo 110 caracteres por noticia. "
         "IMPORTANTE: No uses números, ni guiones, ni asteriscos. Solo el texto plano.\n"
         "AL FINAL añade una línea: 'KEYWORD:' y una palabra en inglés para la foto."
     )
@@ -48,7 +48,7 @@ def descargar_foto(keyword):
         return None
 
 def crear_imagen(noticias, foto_pexels):
-    print("🎨 Aplicando corrección de encuadre y espaciado...")
+    print("🎨 Ajustando diseño: Imagen extendida y texto reposicionado...")
     
     try:
         base = Image.open("src/template.png").convert("RGBA")
@@ -57,8 +57,8 @@ def crear_imagen(noticias, foto_pexels):
         sys.exit(1)
 
     if foto_pexels:
-        # Aumentamos a 450 para asegurar que tape todo el blanco y choque con el rojo
-        target_w, target_h = 1080, 450 
+        # Aumentamos a 480 para asegurar que la foto baje y tape el blanco totalmente
+        target_w, target_h = 1080, 480 
         
         orig_w, orig_h = foto_pexels.size
         ratio = max(target_w/orig_w, target_h/orig_h)
@@ -69,23 +69,24 @@ def crear_imagen(noticias, foto_pexels):
         top = (new_size[1] - target_h)/2
         foto_final = foto_res.crop((left, top, left + target_w, top + target_h))
         
-        # Pegar en el tope
+        # Pegar en el tope (0,0)
         base.paste(foto_final, (0, 0))
 
     d = ImageDraw.Draw(base)
     font_path = "src/Roboto.ttf"
     if not os.path.exists(font_path): font_path = "src/roboto.ttf"
     try:
-        font = ImageFont.truetype(font_path, 40)
+        # Reducimos un pelín la fuente a 38 para más elegancia
+        font = ImageFont.truetype(font_path, 38)
     except:
         font = ImageFont.load_default()
 
-    # --- POSICIONAMIENTO DINÁMICO ---
-    y_actual = 560 # Punto de inicio debajo de "NOTICIAS"
-    ancho_max = 42 # Caracteres por línea
+    # --- POSICIONAMIENTO CORREGIDO ---
+    y_actual = 660 # Bajamos el inicio para no tocar "NOTICIAS"
+    ancho_max = 44 # Un poco más de ancho por línea
 
     for noticia in noticias:
-        # Limpieza extrema de números o basura al inicio
+        # Limpieza de basura al inicio
         noticia = noticia.lstrip('0123456789. -')
         if not noticia.strip(): continue
         
@@ -95,16 +96,16 @@ def crear_imagen(noticias, foto_pexels):
             bbox = d.textbbox((0, 0), line, font=font)
             w = bbox[2] - bbox[0]
             # Centrado horizontal
-            d.text((540 - w/2, y_actual), line, font=font, fill=(255, 255, 255))
-            y_actual += 48 # Espacio entre líneas
+            d.text((540 - w/2, y_actual), line, font=font, fill=(245, 245, 245))
+            y_actual += 45 # Espacio entre líneas (Compacto)
             
-        y_actual += 60 # Espacio entre noticias diferente (para que no se encimen)
+        y_actual += 40 # Espacio entre noticias (Compacto)
 
-    # 3. Guardar como RGB para evitar errores de canal alfa
+    # 3. Guardar como RGB
     final = base.convert("RGB")
     if not os.path.exists('public'): os.makedirs('public')
     final.save("public/post_dia.jpg", "JPEG", quality=98)
-    print("✅ Imagen generada sin amontonamientos.")
+    print("✅ Imagen generada con proporciones corregidas.")
 
 def publicar_en_instagram():
     print("🚀 Publicando...")
@@ -115,7 +116,7 @@ def publicar_en_instagram():
     url_base = f"https://graph.facebook.com/v20.0/{IG_USER_ID}/media"
     payload = {
         'image_url': IMAGE_URL,
-        'caption': f"Resumen Tech de hoy 🤖\n\n{caption}\n\n#Chile #IA #Resumenia",
+        'caption': f"Resumen Tech de hoy 🤖\n\n{caption}\n\n#Chile #IA #Resumenia #Tech",
         'access_token': IG_TOKEN
     }
     
@@ -125,7 +126,7 @@ def publicar_en_instagram():
         time.sleep(30)
         requests.post(f"https://graph.facebook.com/v20.0/{IG_USER_ID}/media_publish", 
                       data={'creation_id': c_id, 'access_token': IG_TOKEN})
-        print("🎉 ¡TODO PUBLICADO!")
+        print("🎉 ¡POST PUBLICADO!")
     else:
         print(f"❌ Error Meta: {r.json()}")
 

@@ -42,11 +42,12 @@ def obtener_datos():
 
     # 3. El Prompt "Periodista"
     prompt = (
-        f"INSTRUCCIÓN: Hoy es {fecha_actual}. "
-        "USA TU HERRAMIENTA DE BÚSQUEDA para encontrar las 3 noticias de tecnología e IA "
-        "más importantes de las últimas 24 horas en Chile y el mundo. "
-        "PROHIBIDO usar noticias de 2024 o 2025. Sé directo y profesional. "
-        "Máximo 110 caracteres por noticia. Sin números ni asteriscos.\n"
+        f"INSTRUCCIÓN DE SISTEMA: Hoy es {fecha_actual}. Actúa como un editor senior de tecnología. "
+        "PASO 1: Usa Google Search para buscar hitos de IA y tecnología de las últimas 24 horas en Chile y el mundo. "
+        "PASO 2: Si no encuentras 3 noticias impactantes de hoy, busca las más recientes de la última semana. "
+        "REGLA DE ORO: No inventes noticias ni mezcles conceptos antiguos. Si un hecho no tiene respaldo en la búsqueda de 2026, descártalo. "
+        "REGLA DE FORMATO: Máximo 110 caracteres por noticia. Sin números, ni guiones, ni asteriscos. Solo texto plano, una noticia por línea. "
+        "MANTÉN EL ENFOQUE: Inteligencia Artificial, hardware potente o lanzamientos tech en Chile.\n"
         "AL FINAL añade una línea: 'KEYWORD:' y una palabra en inglés para la foto."
     )
     

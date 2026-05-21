@@ -23,37 +23,38 @@ def obtener_datos():
     print("🌐 Consultando a Gemini con Google Search (Chile + Mundo)...")
     client = genai.Client(api_key=GEMINI_KEY)
     
-    # 1. Fecha automática
     fecha_actual = datetime.datetime.now().strftime('%d de %B de %Y')
     
-    # 2. Definimos la herramienta con la búsqueda dinámica ANIDADA
-    # Esta es la jerarquía que Pydantic acepta en la v2.4.0
-    config_ia = types.GenerateContentConfig(
-        tools=[
-            types.Tool(
-                google_search=types.GoogleSearchRetrieval(
-                    dynamic_retrieval_config=types.DynamicRetrievalConfig(
-                        dynamic_threshold=0.0 # <--- Fuerza la búsqueda al 100%
-                    )
-                )
-            )
-        ]
-    )
-
-    # 3. El Prompt "Periodista"
-    prompt = (
-        f"INSTRUCCIÓN DE SISTEMA: Hoy es {fecha_actual}. Actúa como un editor senior de tecnología. "
-        "PASO 1: Usa Google Search para buscar hitos de IA y tecnología de las últimas 24 horas en Chile y el mundo. "
-        "PASO 2: Si no encuentras 3 noticias impactantes de hoy, busca las más recientes de la última semana. "
-        "REGLA DE ORO: No inventes noticias ni mezcles conceptos antiguos. Si un hecho no tiene respaldo en la búsqueda de 2026, descártalo. "
-        "REGLA DE FORMATO: Máximo 110 caracteres por noticia. Sin números, ni guiones, ni asteriscos. Solo texto plano, una noticia por línea. "
-        "MANTÉN EL ENFOQUE: Inteligencia Artificial, hardware potente o lanzamientos tech en Chile.\n"
-        "AL FINAL añade una línea: 'KEYWORD:' y una palabra en inglés para la foto."
+    # 1. System Instruction: Aquí van las reglas de comportamiento y formato
+    instrucciones_sistema = (
+        "Eres un editor senior de tecnología. Tu objetivo es redactar un resumen "
+        "basado ESTRICTAMENTE en los resultados de búsqueda de hoy.\n"
+        "REGLAS DE ORO:\n"
+        "- No inventes noticias ni mezcles conceptos antiguos.\n"
+        "- Máximo 110 caracteres por noticia.\n"
+        "- Sin números, ni guiones, ni asteriscos.\n"
+        "- Solo texto plano, una noticia por línea.\n"
+        "- MANTÉN EL ENFOQUE: Inteligencia Artificial, hardware o lanzamientos tech en Chile y el mundo.\n"
+        "- AL FINAL añade una línea exacta: 'KEYWORD:' seguida de una palabra clave en inglés para buscar una foto."
     )
     
-    # 4. Ejecución
+    # 2. Configuración: Activación de búsqueda simplificada y temperatura baja
+    config_ia = types.GenerateContentConfig(
+        system_instruction=instrucciones_sistema,
+        tools=[{"google_search": {}}], # Sintaxis más estable para activar la búsqueda
+        temperature=0.2 # Fundamental para que no invente noticias
+    )
+
+    # 3. El Prompt: Una orden de búsqueda directa y natural
+    prompt = (
+        f"Hoy es {fecha_actual}. Busca en Google las 3 noticias de tecnología "
+        "e Inteligencia Artificial más impactantes publicadas en las últimas 24 horas "
+        "en Chile y a nivel mundial. Devuélveme el resumen siguiendo tus instrucciones de formato."
+    )
+    
+    # 4. Ejecución (Usando un modelo optimizado para búsqueda)
     response = client.models.generate_content(
-        model="gemini-3-flash-preview", 
+        model="gemini-2.5-flash", # Asegúrate de usar un modelo estable reciente
         contents=prompt,
         config=config_ia
     )

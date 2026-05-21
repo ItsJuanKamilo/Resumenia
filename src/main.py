@@ -155,35 +155,48 @@ def crear_imagen(noticias, foto_pexels):
     print("✅ Imagen generada con proporciones corregidas.")
 
 def publicar_en_instagram():
-    print("🚀 Publicando...")
+    print("🚀 Iniciando publicación...")
     if not os.path.exists("public/caption.txt"): return
     with open("public/caption.txt", "r", encoding="utf-8") as f:
         caption = f.read()
 
     url_base = f"https://graph.facebook.com/v20.0/{IG_USER_ID}/media"
-    payload = {
+    
+    # --- 1. PUBLICAR EN EL FEED ---
+    print("📲 Subiendo imagen al Feed...")
+    payload_feed = {
         'image_url': IMAGE_URL,
         'caption': f"Resumen Tech de hoy 🤖\n\n{caption}\n\n#Chile #IA #Resumenia #Tech",
         'access_token': IG_TOKEN
     }
     
-    r = requests.post(url_base, data=payload)
-    if r.status_code == 200:
-        c_id = r.json().get('id')
+    r_feed = requests.post(url_base, data=payload_feed)
+    if r_feed.status_code == 200:
+        c_id_feed = r_feed.json().get('id')
+        print("⏳ Esperando que Meta procese el Feed (30s)...")
         time.sleep(30)
         requests.post(f"https://graph.facebook.com/v20.0/{IG_USER_ID}/media_publish", 
-                      data={'creation_id': c_id, 'access_token': IG_TOKEN})
-        print("🎉 ¡POST PUBLICADO!")
-    else:
-        print(f"❌ Error Meta: {r.json()}")
+                      data={'creation_id': c_id_feed, 'access_token': IG_TOKEN})
+        print("🎉 ¡POST DEL FEED PUBLICADO!")
+        
+        # --- 2. PUBLICAR EN LA HISTORIA ---
+        print("📲 Subiendo imagen a la Historia...")
+        payload_story = {
+            'image_url': IMAGE_URL,
+            'media_type': 'STORIES', # Esto hace la magia de mandarlo a historias
+            'access_token': IG_TOKEN
+        }
+        
+        r_story = requests.post(url_base, data=payload_story)
+        if r_story.status_code == 200:
+            c_id_story = r_story.json().get('id')
+            print("⏳ Esperando que Meta procese la Historia (20s)...")
+            time.sleep(20)
+            requests.post(f"https://graph.facebook.com/v20.0/{IG_USER_ID}/media_publish", 
+                          data={'creation_id': c_id_story, 'access_token': IG_TOKEN})
+            print("🎉 ¡HISTORIA PUBLICADA CON ÉXITO!")
+        else:
+            print(f"❌ Error Meta (Historia): {r_story.json()}")
 
-if __name__ == "__main__":
-    mode = sys.argv[1] if len(sys.argv) > 1 else "generate"
-    if mode == "generate":
-        noticias, kw = obtener_datos()
-        foto = descargar_foto(kw)
-        crear_imagen(noticias, foto)
-        with open("public/caption.txt", "w", encoding="utf-8") as f:
-            f.write("\n\n".join(noticias))
-    elif mode == "publish":
-        publicar_en_instagram()
+    else:
+        print(f"❌ Error Meta (Feed): {r_feed.json()}")

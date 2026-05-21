@@ -52,9 +52,9 @@ def obtener_datos():
         "en Chile y a nivel mundial. Devuélveme el resumen siguiendo tus instrucciones de formato."
     )
     
-    # 4. Ejecución (Usando un modelo optimizado para búsqueda)
+    # 4. Ejecución (Usando el modelo más eficiente y optimizado)
     response = client.models.generate_content(
-        model="gemini-2.5-flash", # Asegúrate de usar un modelo estable reciente
+        model="gemini-3.1-flash-lite", 
         contents=prompt,
         config=config_ia
     )

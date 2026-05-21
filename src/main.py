@@ -200,3 +200,14 @@ def publicar_en_instagram():
 
     else:
         print(f"❌ Error Meta (Feed): {r_feed.json()}")
+
+if __name__ == "__main__":
+    mode = sys.argv[1] if len(sys.argv) > 1 else "generate"
+    if mode == "generate":
+        noticias, kw = obtener_datos()
+        foto = descargar_foto(kw)
+        crear_imagen(noticias, foto)
+        with open("public/caption.txt", "w", encoding="utf-8") as f:
+            f.write("\n\n".join(noticias))
+    elif mode == "publish":
+        publicar_en_instagram()

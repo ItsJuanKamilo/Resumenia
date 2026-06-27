@@ -1,5 +1,5 @@
-OpenAI y Broadcom presentan Jalapeño un nuevo procesador diseñado para acelerar la inferencia de modelos IA
+OpenAI lanza la serie de modelos GPT cinco punto seis con variantes Sol Terra y Luna para diversos usos.
 
-La administración Trump restringe el lanzamiento masivo de GPT cinco por motivos de seguridad nacional
+Anthropic restablece acceso a sus modelos avanzados tras acuerdo de seguridad con el gobierno de Estados Unidos.
 
-DEEPX lanza un módulo de aceleración IA para Raspberry Pi impulsando la robótica y automatización local
+Brasil inaugura su primera unidad de terapia intensiva inteligente con IA para optimizar la atención médica.

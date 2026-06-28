@@ -1,5 +1,5 @@
-OpenAI lanza la serie de modelos GPT cinco punto seis con variantes Sol Terra y Luna para diversos usos.
+OpenAI lanza Jalapeño su primer chip personalizado para optimizar la inferencia de modelos de lenguaje.
 
-Anthropic restablece acceso a sus modelos avanzados tras acuerdo de seguridad con el gobierno de Estados Unidos.
+El Pentágono despliega una nueva herramienta de agentes autónomos para acelerar la toma de decisiones.
 
-Brasil inaugura su primera unidad de terapia intensiva inteligente con IA para optimizar la atención médica.
+La escasez de capacidad de cómputo obliga a Google a limitar el acceso a sus modelos de IA a clientes.

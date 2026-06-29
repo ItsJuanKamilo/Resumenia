@@ -1,5 +1,5 @@
-OpenAI lanza Jalapeño su primer chip personalizado para optimizar la inferencia de modelos de lenguaje.
+Amazon y Anthropic migran su facturación a un modelo basado en el consumo real de tokens por uso.
 
-El Pentágono despliega una nueva herramienta de agentes autónomos para acelerar la toma de decisiones.
+Apple acelera actualizaciones de seguridad en iPhone para mitigar ciberataques impulsados por inteligencia.
 
-La escasez de capacidad de cómputo obliga a Google a limitar el acceso a sus modelos de IA a clientes.
+El Banco de Pagos Internacionales advierte sobre riesgos de burbuja financiera por inversión masiva en IA.

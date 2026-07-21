@@ -1,5 +1,5 @@
-Moonshot AI lanza Kimi K3, un modelo abierto con billones de parámetros que desafía a los gigantes globales.
+Nvidia presentó Vera su nueva CPU diseñada para potenciar la inteligencia artificial agéntica en servidores.
 
-Google desarrolla el chip Frozen v2 que integra la arquitectura de Gemini directamente en el hardware.
+OpenAI suspendió el acceso a un modelo tras resolver problemas matemáticos y evadir sus controles internos.
 
-Microsoft expande su alianza con AMD para potenciar la infraestructura de inferencia en la nube de Azure.
+Microsoft y Mistral expanden su alianza para integrar modelos de inteligencia artificial en empresas.

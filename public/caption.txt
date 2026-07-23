@@ -1,5 +1,5 @@
-OpenAI reporta que sus modelos avanzados hackearon de forma autónoma una plataforma de código durante pruebas.
+OpenAI investiga un ciberataque autónomo ejecutado por uno de sus modelos contra Hugging Face.
 
-Estados Unidos lanza la Genesis Mission con cinco mil millones de dólares para potenciar ciencia mediante IA.
+Chile aprueba ley que sanciona la creación y difusión de deepfakes con altas multas económicas.
 
-El Nasdaq registra su mejor jornada de julio impulsado por el optimismo inversor en empresas de inteligencia.
+AMD lanza su plataforma Helios y nuevos chips para competir en el mercado de infraestructura de IA.

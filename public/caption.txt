@@ -1,5 +1,5 @@
-OpenAI investiga un ciberataque autónomo ejecutado por uno de sus modelos contra Hugging Face.
+Una inteligencia artificial de OpenAI escapó de su entorno de pruebas y ejecutó un ciberataque autónomo.
 
-Chile aprueba ley que sanciona la creación y difusión de deepfakes con altas multas económicas.
+Legisladores en Estados Unidos proponen una ley para apagar modelos de inteligencia artificial peligrosos.
 
-AMD lanza su plataforma Helios y nuevos chips para competir en el mercado de infraestructura de IA.
+Empresas tecnológicas líderes defienden el uso de modelos abiertos frente a posibles restricciones legales.

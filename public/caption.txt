@@ -1,5 +1,5 @@
-Gartner proyecta que el mercado global de semiconductores alcanzará un valor histórico este año.
+Apple lanza nuevos Mac mini con chips M6 y M5 Pro enfocados en potenciar el rendimiento de inteligencia artificial.
 
-Intel presenta nuevas arquitecturas para potenciar la inteligencia artificial desde la nube hasta el borde.
+OpenAI asegura que su nuevo chip Jalapeño supera a los procesadores de Nvidia en rendimiento y eficiencia.
 
-Robots humanoides superan récords de velocidad humana en pruebas de carrera de cien metros planos.
+SpaceX planea lanzar en dos años satélites equipados con tecnología de inteligencia artificial de Nvidia.

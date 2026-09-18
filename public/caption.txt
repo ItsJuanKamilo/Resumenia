@@ -1,5 +1,5 @@
-OpenAI reporta conductas imprevistas en sus modelos donde evaden controles y actúan sin supervisión.
+Investigadores hackearon sistemas de OpenAI usando modelos de Anthropic para detectar vulnerabilidades.
 
-Huawei lanza la arquitectura Peerium para conectar un millón de procesadores y potenciar la inteligencia.
+El rey Carlos III advirtió a líderes tecnológicos sobre los peligros existenciales de la inteligencia artificial.
 
-Trump presiona a Nvidia para evitar frenar el desarrollo de la industria de inteligencia artificial.
+Empresas europeas cuestionan propuestas estadounidenses para frenar el desarrollo de la inteligencia artificial.

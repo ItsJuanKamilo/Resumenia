@@ -1,5 +1,5 @@
-Intel presenta sus nuevos aceleradores GPU serie D para potenciar servicios de inteligencia artificial.
+Científicos piden un organismo internacional para supervisar la seguridad de la inteligencia artificial.
 
-OpenAI ficha a un alto ejecutivo de hardware de Microsoft para fortalecer su arquitectura de cómputo.
+Apple integra modelos de inteligencia artificial de Alibaba en sus dispositivos para el mercado chino.
 
-La Unión Europea inaugura el Mes de la Innovación en IA para impulsar su adopción en la industria.
+Intel lanza su nueva serie de chips GPU para acelerar la inferencia de inteligencia artificial local.

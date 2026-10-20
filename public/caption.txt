@@ -1,5 +1,5 @@
-Investigadores advierten sobre gusanos de inteligencia artificial capaces de replicarse en dispositivos inteligentes
+La CEPAL y el CENIA presentan hoy en Santiago el Índice Latinoamericano de Inteligencia Artificial
 
-Google y Synaptics presentan un chip de bajo consumo que reduce el gasto energético en inteligencia artificial
+Expertos advierten que el uso malicioso de la inteligencia artificial es una amenaza para la humanidad
 
-El sector tecnológico enfrenta una caída global ante temores financieros sobre la inversión en inteligencia artificial
+Amazon lanza TorchNeuron para ejecutar código de PyTorch en sus chips de IA sin necesidad de cambios

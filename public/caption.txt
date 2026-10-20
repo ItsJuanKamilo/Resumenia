@@ -1,5 +1,5 @@
-La CEPAL y el CENIA presentan hoy en Santiago el Índice Latinoamericano de Inteligencia Artificial
+SpaceX reporta un crecimiento masivo en su división de inteligencia artificial superando a otros negocios
 
-Expertos advierten que el uso malicioso de la inteligencia artificial es una amenaza para la humanidad
+La ONU advierte sobre el peligro de una guerra dirigida por máquinas y sistemas de armas autónomos
 
-Amazon lanza TorchNeuron para ejecutar código de PyTorch en sus chips de IA sin necesidad de cambios
+Amazon acumula hardware de Nvidia por miles de millones pese a falta de energía para operarlo

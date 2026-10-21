@@ -1,5 +1,5 @@
-SpaceX reporta un crecimiento masivo en su división de inteligencia artificial superando a otros negocios
+Detectan fallas críticas en el lenguaje PHP que ponen en riesgo a gran parte de los sitios web mundiales.
 
-La ONU advierte sobre el peligro de una guerra dirigida por máquinas y sistemas de armas autónomos
+Nvidia presenta en Berlín sistemas modulares para acelerar la construcción de centros de datos de IA.
 
-Amazon acumula hardware de Nvidia por miles de millones pese a falta de energía para operarlo
+Encuesta revela que la mayoría de los estadounidenses se opone a la construcción de nuevos centros de datos.

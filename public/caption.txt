@@ -1,5 +1,5 @@
-Detectan fallas críticas en el lenguaje PHP que ponen en riesgo a gran parte de los sitios web mundiales.
+Microsoft lanza Contact Center Intelligence para integrar agentes de IA en plataformas de terceros.
 
-Nvidia presenta en Berlín sistemas modulares para acelerar la construcción de centros de datos de IA.
+DeepSeek recauda quince mil millones de dólares tras restricciones impuestas por el gobierno de Estados Unidos.
 
-Encuesta revela que la mayoría de los estadounidenses se opone a la construcción de nuevos centros de datos.
+Hackatón en Chile aplica inteligencia artificial para resolver desafíos críticos en la industria salmonera.

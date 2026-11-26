@@ -1,5 +1,5 @@
-Jensen Huang regresa a Nvidia para liderar la estrategia global en medio de la carrera tecnológica.
+Nvidia anuncia nueva arquitectura de chips para acelerar cargas de trabajo de inteligencia artificial
 
-GMKtec lanza un supercomputador de escritorio capaz de ejecutar modelos de inteligencia artificial masivos.
+Kioxia presenta prototipos de memoria flash de alto rendimiento optimizada para sistemas de inteligencia artificial
 
-Ciberataques globales aumentan drásticamente apoyados por herramientas de inteligencia artificial avanzada.
+Soracom lanza una suite de conectividad segura diseñada específicamente para robots y máquinas autónomas
